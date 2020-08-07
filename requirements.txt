@@ -1,0 +1,8 @@
+django==3.0.3
+python-dotenv==0.11.0
+django-extensions==2.2.8
+cffi==1.14.0
+cryptography==2.8
+pycparser==2.19
+mysqlclient==1.4.6
+pluck==0.2
