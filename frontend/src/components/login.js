@@ -6,7 +6,7 @@ import {
 } from 'reactstrap';
 
 import { Link } from "react-router-dom";
-import { Cookies } from 'react-cookie';
+
 
 
 const AUTH_URL = 'http://127.0.0.1:8000/sarah/login/'
@@ -34,9 +34,9 @@ class Login extends Component {
                     window.location.href = "/";
                 }
                 else if (data.OTP) {
-                    window.location.href = "/otp/verification";
-                    var a = Cookies.get('otp')
-                    alert(a)
+                    localStorage.setItem('user_id', data.id)
+                    localStorage.setItem('backendOTP', data.otp)
+                    window.location.href = '/otp/verification';
                     alert('Your account is not verified\nEnter the OTP which is send to your Registred Email to activate your account');
                 }
                 else{

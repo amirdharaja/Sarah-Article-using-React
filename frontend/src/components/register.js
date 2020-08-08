@@ -33,7 +33,13 @@ class Register extends Component {
             body: JSON.stringify(this.state.credentials)
         })
             .then(data => data.json())
-            .then(data => { console.log(data); })
+            .then(data => {
+                if (data.email){
+                    window.location.href = "/login";
+                    alert('Registration Success\nNow you can Login')
+                }
+                else alert('Faild, Retry with valid Input')
+            })
             .catch(error => console.error(error))
     }
 

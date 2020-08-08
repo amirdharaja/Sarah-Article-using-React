@@ -11,6 +11,8 @@ from backend.viewsets import (
 )
 from backend.controllers.common_controller import (
     login,
+    activate_account,
+    verify_otp
 )
 
 
@@ -26,4 +28,5 @@ router.register('users', UserViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('login/', login, name='login'),
+    path('login/otp/verification/', verify_otp, name='verify_otp'),
 ]

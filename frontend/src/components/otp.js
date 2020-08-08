@@ -8,40 +8,50 @@ import {
 import { Link } from "react-router-dom";
 
 
-const AUTH_URL = 'http://127.0.0.1:8000/sarah/login/'
+
+const OTP_VERIFICATION_URL = 'http://127.0.0.1:8000/sarah/login/otp/verification/'
 
 
 class OTP extends Component {
 
     state = {
         credentials: {
-            username: '',
-            password: ''
+            otp: '',
+            id: localStorage.getItem('user_id')
         }
     }
 
-    login = event => {
-        fetch(AUTH_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.state.credentials)
-        })
-            .then(data => data.json())
-            .then(data => {
-                localStorage.setItem('token', data.token)
-                if (data.token) {
-                    window.location.href = "/";
-                }
-                else if (data.OTP) {
-                    window.location.href = "/otp/verification";
-                    var a = process.getCookie('otp')
-                }
-                else{
-                    alert('Login Failure\nCheck your Username and Password')
-                }
+    otpVerification = event => {
+        console.log(localStorage.getItem('backendOTP'))
+        // console.log(this.state.credentials.otp)
+        if (localStorage.getItem('backendOTP') === this.state.credentials.otp) {
+            alert('OTP Verification success, Your account has been activated')
+            fetch(OTP_VERIFICATION_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(this.state.credentials)
             })
-            .catch(error => console.error(error),
-        );
+                .then(data => data.json())
+                .then(data => {
+                    localStorage.setItem('token', data.token)
+                    if (data.token) {
+                        window.location.href = "/";
+                    }
+                    else if (data.OTP) {
+                        window.location.href = "/otp/verification";
+                    }
+                    else {
+                        alert('Login Failure\nCheck your Username and Password')
+                    }
+                })
+                .catch(error => console.error(error)
+            ,
+                );
+        }
+        else{
+            alert('Wrong OTP, Try again')
+            window.location.href = "/otp/verification";
+        }
     }
 
     inputChanged = event => {
@@ -61,14 +71,14 @@ class OTP extends Component {
                     <div>
                         <label id='email'>OTP</label>
                         <Input
-                            type='text'
+                            type='number'
                             name='otp'
                             value={this.state.credentials.username}
                             onChange={this.inputChanged}
                             placeholder='Enter 4 Digit OTP'
                             title="Valid OTP only is allowed to activate your account" required />
                     </div>
-                    <Button color="success" type='submit' onClick={this.login}>Verify</Button>
+                    <Button color="success" type='submit' onClick={this.otpVerification}>Verify</Button>
                     <div id="login-register">
                         <h6><a href="/login">Forget Password</a></h6>
                         Dont't have an account?<Link to="/register">Register</Link>

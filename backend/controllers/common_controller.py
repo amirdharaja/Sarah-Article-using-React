@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User, auth
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 from datetime import datetime, timedelta
+import json
 
 
 from backend.models.ArticleModel import Article
@@ -58,17 +60,20 @@ def login(request):
 
 
 def activate_account(request, user):
-    print(request.data,'*************************')
     randam_number = randint(1000, 9999)
-    otp = str(randam_number) + ',' + user.email
     subject = 'OTP - SARAH Articles'
     content = '''Dear, {} {}\n
                 Enter the following OTP to activate your account
                 Your OTP : {}'''.format(user.first_name, user.last_name, randam_number)
     send_email(user.email, subject, content)
-    response = Response({'OTP': 'OTP successfully send to your Email'}, status=HTTP_200_OK)
-    response.set_cookie('otp', otp)
-    return response
+    return Response({'OTP': 'OTP successfully send to your Email','id':user.id, 'otp':randam_number}, status=HTTP_200_OK)
+
+@api_view(["POST"])
+def verify_otp(request):
+    data = json.loads(request.body.decode('utf-8'))
+    User.objects.filter(id=data['id']).update(is_staff=True)
+    token = Token.objects.filter(user_id=data['id']).first()
+    return Response({'success': 'Your Account is activated', 'token':token.token}, status=HTTP_200_OK)
 
 
 @api_view(["DELETE", "POST"])
