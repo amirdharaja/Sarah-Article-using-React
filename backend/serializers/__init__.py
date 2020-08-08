@@ -1,12 +1,12 @@
 from django.contrib.auth.models import User
 
 from rest_framework.serializers import ModelSerializer
-from rest_framework.authtoken.models import Token
 
 from backend.models.ArticleModel import Article
 from backend.models.CommentModel import Comments
 from backend.models.LikeArticleModel import LikeArticle
 from backend.models.LoginHistoryModel import LoginHistory
+from backend.models.TokenModel import Token
 
 
 
@@ -23,11 +23,6 @@ class UserSerializer(ModelSerializer):
         extra_kwargs = {
             'password': {'write_only':True, 'required':True},
         }
-
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        Token.objects.create(user=user)
-        return user
 
 
 class ArticleSerializer(ModelSerializer):

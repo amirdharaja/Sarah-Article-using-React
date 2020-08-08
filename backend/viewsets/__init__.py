@@ -27,9 +27,6 @@ class UserViewSet(ModelViewSet):
 class ArticleViewSet(ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    authentication_classes = [TokenAuthentication,]
-    permission_classes = [IsAuthenticated,]
-
 
 class CommentsViewSet(ModelViewSet):
     queryset = Comments.objects.all()

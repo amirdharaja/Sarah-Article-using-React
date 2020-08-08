@@ -6,13 +6,12 @@ import {
 } from 'reactstrap';
 
 import { Link } from "react-router-dom";
-import { Cookies } from 'react-cookie';
 
 
 const AUTH_URL = 'http://127.0.0.1:8000/sarah/login/'
 
 
-class Login extends Component {
+class OTP extends Component {
 
     state = {
         credentials: {
@@ -35,9 +34,7 @@ class Login extends Component {
                 }
                 else if (data.OTP) {
                     window.location.href = "/otp/verification";
-                    var a = Cookies.get('otp')
-                    alert(a)
-                    alert('Your account is not verified\nEnter the OTP which is send to your Registred Email to activate your account');
+                    var a = process.getCookie('otp')
                 }
                 else{
                     alert('Login Failure\nCheck your Username and Password')
@@ -60,27 +57,18 @@ class Login extends Component {
             <div id='login'>
                 <img src={require('../resources/login_img.png')} alt='logo' />
                 <div>
-                    <h1>Log In</h1>
+                    <h1>OTP Verification</h1>
                     <div>
-                        <label id='email'>Email</label>
+                        <label id='email'>OTP</label>
                         <Input
                             type='text'
-                            name='username'
+                            name='otp'
                             value={this.state.credentials.username}
                             onChange={this.inputChanged}
-                            placeholder='Username'
-                            title="Valid Email only is allowed to login" required />
+                            placeholder='Enter 4 Digit OTP'
+                            title="Valid OTP only is allowed to activate your account" required />
                     </div>
-                    <div>
-                        <label>Password</label>
-                        <Input
-                            type='password'
-                            name='password'
-                            value={this.state.credentials.password}
-                            onChange={this.inputChanged}
-                            placeholder='Password' required />
-                    </div>
-                    <Button color="success" type='submit' onClick={this.login}>Submit</Button>
+                    <Button color="success" type='submit' onClick={this.login}>Verify</Button>
                     <div id="login-register">
                         <h6><a href="/login">Forget Password</a></h6>
                         Dont't have an account?<Link to="/register">Register</Link>
@@ -91,4 +79,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default OTP;
