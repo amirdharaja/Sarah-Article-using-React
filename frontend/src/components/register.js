@@ -12,6 +12,11 @@ import {
 
 const USERS_URL = 'http://127.0.0.1:8000/sarah/users/'
 
+var isLoggedIn = false;
+if (localStorage.getItem('token')) {
+    isLoggedIn = true
+}
+
 class Register extends Component {
 
     state = {
@@ -24,6 +29,11 @@ class Register extends Component {
         }
     }
 
+    logout() {
+        localStorage.clear();
+        window.location.href = '/login';
+        alert('Logout Success')
+    }
 
     register = event => {
         this.state.credentials.email = this.state.credentials.username
@@ -68,10 +78,12 @@ class Register extends Component {
                         <Link to="/">
                             <Button color='light' id='navButton'>Home</Button>
                         </Link>
-                        <Link to="/login">
-                            <Button color='light' id='navButton'>Login</Button>
-                        </Link>
-                        <Button color='danger' id='navButton'>Logout</Button>
+                        {isLoggedIn || <Link to="/login">
+                            <Button color='light' id='avButton'>Login</Button>
+                        </Link>}
+                        {isLoggedIn && <Link to="/login">
+                            <Button color='danger' id='navButton' onClick={this.logout}>Logout</Button>
+                        </Link>}
                     </NavbarText>
                 </Navbar>
 

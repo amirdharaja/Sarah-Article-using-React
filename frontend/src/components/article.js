@@ -5,7 +5,7 @@ import {
     Navbar,
     NavbarBrand,
     Nav,
-    NavbarText
+    NavbarText,
 } from 'reactstrap';
 
 
